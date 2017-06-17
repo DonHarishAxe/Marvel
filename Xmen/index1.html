@@ -1,0 +1,480 @@
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ciphertrick.com/demo/jquerysession/js/jquerysession.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+<style>
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* The Modal (background) */
+
+/*table, td, th {
+    border: 1px solid black;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    text-align: left;
+}*/
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+.logoutLblPos{
+
+   position:fixed;
+   right:10px;
+   top:5px;
+}
+</style>
+</head>
+
+<body>  
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Click here for your bio</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="gg"></div>
+  </div>
+
+</div>
+
+<script>
+</script>
+
+<script>
+	//var ip="http://10.128.7.66:9000/";
+	var ip="http://192.168.43.149:9000/";	
+	function render(txt,divid){
+		var employees = $.parseJSON( txt.employees);
+		var $table = $( "<table></table>" );
+
+		for ( var i = 0; i < employees.length; i++ ) {
+		    var emp = employees[i];
+		    console.log(emp.todoItem);	
+		    if(emp.active){
+			    var $line = $( "<tr></tr>" );
+			    var $checkbox = $( '<td><input type="checkbox" onclick="putFunction(this);"></td>' ); 
+			    $line.append( $checkbox );
+			    $line.append( $( "<td style='display:none'></td>" ).html( emp.id ) );
+			    $line.append( $( "<td></td>" ).html( emp.todoItem ) );
+			    $table.append( $line );
+		    }
+		}
+
+		$(divid).html("");		
+		$table.appendTo( $( divid ) );
+	}
+	function render1(txt,divid){
+		var employees = $.parseJSON( txt.employees);
+		var $table = $( "<table></table>" );
+
+		for ( var i = 0; i < employees.length; i++ ) {
+		    var emp = employees[i];	
+		    if(emp.active){
+			    var $line = $( "<tr></tr>" );
+			    var $checkbox = $( '<td><input type="checkbox" onclick="putFunction1(this);"></td>' ); 
+			    $line.append( $checkbox );
+			    $line.append( $( "<td style='display:none'></td>" ).html( emp.id ) );
+			 
+			    $line.append( $( "<td></td>" ).html( emp.setBy ) );
+			    $line.append( $( "<td></td>" ).html( emp.todoItem ) );
+			    $table.append( $line );
+		    }
+		}
+
+		$(divid).html("");		
+		$table.appendTo( $( divid ) );
+	}
+	function getFunction(divid)
+	{
+		return fetch(ip + "personal/", {credentials: 'include', mode: 'cors'})
+		.then(res => res.json())
+		.then(function(res)
+		{ 
+			if(res.status == 403){
+				window.location.href = '/index.html';			
+			}
+			
+			var jsonData = {};
+			jsonData["employees"]=JSON.stringify(res);
+			render(jsonData,divid);   
+		})
+		.catch(function(res){ console.log(res) })
+	
+	}
+	function getFunction1(divid)
+	{
+		return fetch(ip + "squad/", {credentials: 'include', mode: 'cors'})
+		.then(res => res.json())
+		.then(function(res)
+		{ 
+		
+			var jsonData = {};
+			jsonData["employees"]=JSON.stringify(res);	
+			render1(jsonData,divid);   
+		})
+		.catch(function(res){ console.log(res) })
+	
+	}
+	
+	function getQueryVariable(variable) {
+	  var query = window.location.search.substring(1);
+	  var vars = query.split("&");
+	  for (var i=0;i<vars.length;i++) {
+	    var pair = vars[i].split("=");
+	    if (pair[0] == variable) {
+		return pair[1];
+		
+	    }
+	  } 
+	}
+		
+	function putFunction(event)
+	{
+		var id=event.parentElement.nextElementSibling.firstChild.textContent;
+		console.log(id);		
+		var str1 = ip + "personal/";
+		var res = str1.concat(id);
+		fetch(res,{
+		    credentials: 'include', mode: 'cors',
+		    method: "PUT"
+		})
+		.then(function(res)
+		{ 
+			getFunction("#ggwp");
+		})
+		
+	        /*fetch(res,{
+		    method: "PUT",
+		})
+		.then(function(res)
+		{ 
+			
+			return fetch("http://10.128.7.66:9000/personal/" + getQueryVariable("username"))
+		})
+		.then(res => res.json())
+		.then(function(res)
+		{ 
+				var jsonData = {};
+				jsonData["employees"]=JSON.stringify(res);
+				//alert(JSON.stringify(jsonData));			
+				render(jsonData);   
+			})
+		.catch(function(res){ console.log(res) })
+		*/
+ 		
+	}
+	function putFunction1(event)
+	{
+		var id=event.parentElement.nextElementSibling.firstChild.textContent;
+		console.log(id);		
+		var str1 = ip + "squad/";
+		var res = str1.concat(id);
+		fetch(res,{
+		    method: "PUT",credentials: 'include', mode: 'cors'
+		})
+		.then(function(res)
+		{ 
+			getFunction1("#ggwp1");
+		})
+	}
+	function loadBio(username){
+				
+		// Get the modal
+		var modal = document.getElementById('myModal');
+
+		// Get the button that opens the modal
+		var btn = document.getElementById("myBtn");
+
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+
+		// When the user clicks the button, open the modal 
+	        fetch(ip + "bio/",
+		{
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'},
+		    credentials: 'include', mode: 'cors',
+		    method: "GET"
+		})
+		.then(res => res.text ())
+		.then(function(res)
+		{
+			 $("#gg").html(res);
+			
+			  modal.style.display = "block";
+
+		});
+	}
+	
+	function render2(txt){
+		var employees = $.parseJSON( txt.employees);
+		var $table = $( "<table></table>" );
+
+		for ( var i = 0; i < employees.length; i++ ) {
+		    var emp = employees[i];	
+		    var $line = $( "<tr></tr>" );
+		    console.log(emp.avenger);
+		    //console.log(emp.username);
+		    if(emp.uname.valueOf() == getQueryVariable("username").valueOf() && emp.avenger == false){
+			$("#redirect").hide();
+		    }
+		    var $str="<td><a onclick=\"loadBio('" + emp.uname + "')\">" + emp.uname + "</a></td>";
+		    console.log($str); 
+		    $line.append( $str );
+		    $table.append( $line );
+		}
+		$("#glhf").html("");		
+		$table.appendTo( $( "#glhf" ) );		
+	}
+	
+
+$(document).ready(function(){ 
+//loadBio("h2");
+
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+    fetch(ip + "bio/",
+		{
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'},
+		    credentials: 'include', mode: 'cors',
+		    method: "GET"
+		})
+		.then(res => res.text ())
+		.then(function(res)
+		{
+			 $("#gg").html(res);
+				
+		          modal.style.display = "block";
+
+		});
+};
+fetch(ip + "bio/all/xmen",
+		{
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'},
+		    credentials: 'include', mode: 'cors',
+		    method: "GET"
+		})
+		.then(res => res.json())
+		.then(function(res)
+		{ 
+		
+			var jsonData = {};
+			jsonData["employees"]=JSON.stringify(res);
+			render2(jsonData);   
+		});
+	
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+	var username = getQueryVariable("username");
+	/*var txt = '{"employees":[' +
+	    '{"firstName":"John","lastName":"Doe" },' +
+	    '{"firstName":"Anna","lastName":"Smith" },' +
+	    '{"firstName":"Peter","lastName":"Jones" }]}';*/
+	fetch(ip + "personal/",
+		{
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'},
+		    credentials: 'include', mode: 'cors',
+		    method: "GET"
+		})
+		.then(function(res)
+		{ 
+			if(res.status == 403){
+				window.location.href = '/index.html';			
+			}
+			var jsonData = {};
+			jsonData["employees"]=JSON.stringify(res);
+			console.log('here');
+			render(jsonData,"#ggwp");   
+		})
+	
+	getFunction("#ggwp");
+	$('#b1').click(function(){ 
+		var myObject = new Object();
+		myObject.todoItem = $("#t1").val(); 
+		myObject.setBy = getQueryVariable("username");
+		fetch(ip + "personal/",
+		{
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'},
+		    credentials: 'include', mode: 'cors',
+		    method: "POST",
+		    body: JSON.stringify(myObject)
+		})
+		.then(function(res)
+		{ 
+		     getFunction("#ggwp");
+		})
+	});
+	$('#logout').click(function(){ 
+		fetch(ip + "user/logout",
+		{
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'},
+		    credentials: 'include', mode: 'cors',
+		    method: "GET",
+	        })
+		.then(function(res)
+		{ 
+			console.log("wtf");
+			console.log(res);
+			window.location.href = '/index.html';
+		})
+	});
+	
+	fetch(ip + "squad/",
+		{
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'
+		    },
+		    credentials: 'include', mode: 'cors',
+		    method: "GET"
+		})
+		.then(res => res.json())
+		.then(function(res)
+		{ 
+		
+			var jsonData = {};
+			jsonData["employees"]=JSON.stringify(res);
+			render1(jsonData,"#ggwp1");   
+		})
+	$('#b2').click(function(){ 
+		var myObject = new Object();
+		myObject.todoItem = $("#t2").val(); 
+		fetch(ip + "squad/xmen/",
+		{
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json'
+		    },
+		    credentials: 'include', mode: 'cors',
+		    method: "POST",
+		    body: JSON.stringify(myObject)
+		})
+		.then(function(res)
+		{ 
+		     getFunction1("#ggwp1");
+		})
+	});
+	$('#redirect').click(function(){ 
+		window.location.href='http://192.168.43.79:8000/index1.html?username='+getQueryVariable("username");
+	});
+});
+</script>
+<br><br>
+
+Personal To-do list<br><br>
+<div id="ggwp"></div>
+<br><br>
+Add a new task <input type="text" id="t1">
+<button id="b1">Add</button><br><br><br>
+<br><br><br>
+
+Squad To-do list<br><br>
+<div id="ggwp1"></div>
+<br><br>
+Add a new task <input type="text" id="t2">
+<button id="b2">Add</button><br><br><br>
+<br><br><br>
+
+Bio of squad<br><br>
+<div id="glhf"></div>
+<br><br>
+
+  <label class="logoutLblPos">
+  <button align="right" id="logout">Logout</button>
+  </label>
+	</body>
+<button id="redirect">Redirect</button>
+</html>

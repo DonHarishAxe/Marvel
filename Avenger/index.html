@@ -1,0 +1,186 @@
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ciphertrick.com/demo/jquerysession/js/jquerysession.js"></script>
+</head>
+
+<body>  
+
+LOGIN<br>
+Username <input type="text" id="User1"><br>
+Password <input type="password" id="Pass1"><br>
+<button id="b1">Login</button><br><br><br>
+REGISTER<br>
+Username<input type="text" id="User2"><br>
+Password<input type="password" id="Pass2"><br>
+Firstname<input type="text" id="FN"><br>
+Lastname<input type="text" id="LN"><br>
+Email<input type="email" id="Email"><br>
+Superpower<input type="text" id="SP"><br>
+Bio<input type="text" id="Bio"><br>
+
+<button id="b2">Register</button><br><br><br>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    var ip="http://192.168.43.149:9000/"; 
+    //var ip="http://10.128.7.66:9000/"       
+    $('#b1').click(function(){ 
+	var myObject = new Object();
+	myObject.username = $("#User1").val(); 
+        myObject.password = $("#Pass1").val(); 
+        
+	//fetch('http://localhost:9000/login', {credentials: 'include', mode: 'cors'}).then(r => r.json()).then(console.log)
+	fetch(ip + "user/login/avenger",
+	{
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    credentials: 'include', mode: 'cors',
+	    method: "POST",
+	    body: JSON.stringify(myObject)
+	})
+	.then(function(res)
+	{ 
+	    console.log(res.status);
+	    if(res.status == 202){
+		alert("Successful login");
+		window.location = '/index1.html?username=' + myObject.username;
+	    }
+	    else if(res.status == 409)
+	    {
+		alert("Wrong place to login");
+	    } 
+	    else
+	    {
+		 alert("Invalid username/password");
+            }
+	})
+	.catch(function(res){ console.log(res) })
+/*         $.get("http://localhost:9000/employees/",
+         function(data) {
+	
+            alert(JSON.stringify(data));         
+          });   */
+    });
+
+    $('#b2').click(function(){ 
+	var myObject = new Object();
+	myObject.uname = $("#User2").val(); 
+        myObject.password = $("#Pass2").val(); 
+	myObject.fname = $("#FN").val(); 
+	myObject.lname = $("#LN").val(); 
+	myObject.email = $("#Email").val(); 
+	myObject.powers = $("#SP").val();
+	myObject.bio = $("#Bio").val(); 
+	//fetch(`http://localhost:9000/employees/${$("#getById").val()}`, {credentials: 'include', mode: 'cors'}).then(r => r.text()).then(console.log)
+	fetch(ip + "user/register/avenger",
+	{
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json'
+	    },
+	    method: "POST",
+	    credentials: 'include', mode: 'cors',
+	 
+	    body: JSON.stringify(myObject)
+	})
+	.then(function(res)
+	{ 
+	    console.log(res.status);
+	    if(res.status == 201){
+		console.log(myObject);
+		alert("Successful registration");
+	    }
+	    else
+	    {
+		alert("Email/Username already in use");
+	    } 
+	})
+	.catch(function(res){ console.log(res) })/*	var prefix="http://localhost:9000/employees/";
+	value = $("#getById").val(); 
+        prefix=prefix.concat(value);
+	//alert(prefix);  	 	
+	$.get(prefix,
+        function(data) {
+            alert(JSON.stringify(data));         
+          });   */
+    });
+/*
+    $('#b3').click(function(){ 
+	var prefix="http://localhost:9000/employees/";
+	value = $("#deleteById").val(); 
+        prefix=prefix.concat(value);
+	        
+	$.ajax({ 
+             type: "DELETE",
+             dataType: "json",
+             url: prefix,
+             success: function(data){        
+                //alert("Deleted");
+             }
+         });
+    });
+    
+    $('#b4').click(function(){ 
+	var prefix="http://localhost:9000/employees/";
+	id = $("#id").val(); 
+        name = $("#name").val(); 
+        address = $("#address").val();         
+	var myObject = new Object();
+	myObject.name = name;
+	myObject.address = address;
+	myObject.id = id;
+	var finalobj = JSON.stringify(myObject);
+        alert(finalobj);
+	$.ajax({ 
+             type: "POST",
+             dataType: "json",
+	     contentType: "application/json",
+	     data: finalobj,
+             url: prefix,
+             success: function(data){        
+                //alert("Deleted");
+             }
+         });
+    });
+    
+    $('#b5').click(function(){ 
+	var prefix="http://localhost:9000/employees/";
+	id = $("#id1").val(); 
+        name = $("#name1").val(); 
+        address = $("#address1").val();
+	prefix=prefix.concat(id);
+	         
+	var myObject = new Object();
+	myObject.name = name;
+	myObject.address = address;
+	myObject.id = id;
+	var finalobj = JSON.stringify(myObject);
+        alert(prefix);
+	$.ajax({ 
+             type: "PUT",
+             dataType: "json",
+	     contentType: "application/json",
+	     data: finalobj,
+             url: prefix,
+             success: function(data){        
+                //alert("Deleted");
+             }
+         });
+    });
+   
+*/
+});
+
+
+</script>
+
+
+
+</body>
+ 
+</html>
+

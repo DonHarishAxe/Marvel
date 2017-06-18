@@ -3,24 +3,8 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://ciphertrick.com/demo/jquerysession/js/jquerysession.js"></script>
-</head>
 
-<body>  
-
-LOGIN<br>
-Username <input type="text" id="User1"><br>
-Password <input type="password" id="Pass1"><br>
-<button id="b1">Login</button><br><br><br>
-REGISTER<br>
-Username<input type="text" id="User2"><br>
-Password<input type="password" id="Pass2"><br>
-Firstname<input type="text" id="FN"><br>
-Lastname<input type="text" id="LN"><br>
-Email<input type="email" id="Email"><br>
-Superpower<input type="text" id="SP"><br>
-Bio<input type="text" id="Bio"><br>
-
-<button id="b2">Register</button><br><br><br>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -46,7 +30,7 @@ $(document).ready(function(){
 	{ 
 	    console.log(res.status);
 	    if(res.status == 202){
-		alert("Successful login");
+		//alert("Successful login");
 		window.location = '/index1.html?username=' + myObject.username;
 	    }
 	    else if(res.status == 409)
@@ -177,6 +161,44 @@ $(document).ready(function(){
 
 
 </script>
+
+
+
+</head>
+
+<body>  
+
+<div class="container" >
+	<div class="row" style="text-align: center;"><h1>AVENGER</h1></div><br/>
+	<div class="row">
+		<div class="col-sm-4"></div>
+		<div class="well col-sm-4" style="text-align:center;">
+			<h3>LOGIN</h3><br/><br/>
+			<input type="text" placeholder="username" id="User1"><br>
+			<input type="password" placeholder="password" id="Pass1"><br>
+			<br/>
+			<button id="b1">Login</button><br><br><br>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4"></div>
+		<div class="well col-sm-4" style="text-align: center;">
+			<h3>REGISTER</h3><br><br/>
+			<input placeholder="username" type="text" id="User2"><br>
+			<input placeholder="password" type="password" id="Pass2"><br>
+			<input placeholder="firstname" type="text" id="FN"><br>
+			<input placeholder="lastname" type="text" id="LN"><br>
+			<input placeholder="email" type="email" id="Email"><br>
+			<input placeholder="superpower" type="text" id="SP"><br>
+			<input placeholder="bio" type="text" id="Bio"><br>
+			<br/>
+			<button class="btn btn-primary" id="b2">Register</button><br><br><br>
+		</div>
+	</div>
+</div>
+
+
+
 
 
 

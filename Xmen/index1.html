@@ -84,25 +84,6 @@ th {
    top:5px;
 }
 </style>
-</head>
-
-<body>  
-<!-- Trigger/Open The Modal -->
-<button id="myBtn">Click here for your bio</button>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <div id="gg"></div>
-  </div>
-
-</div>
-
-<script>
-</script>
 
 <script>
 	//var ip="http://10.128.7.66:9000/";
@@ -253,7 +234,7 @@ th {
 		var span = document.getElementsByClassName("close")[0];
 
 		// When the user clicks the button, open the modal 
-	        fetch(ip + "bio/",
+	        fetch(ip + "bio/" + username,
 		{
 		    headers: {
 		      'Accept': 'application/json',
@@ -295,7 +276,7 @@ th {
 
 $(document).ready(function(){ 
 //loadBio("h2");
-
+//alert(getQueryVariable("username"));
 // Get the modal
 var modal = document.getElementById('myModal');
 
@@ -307,7 +288,7 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
-    fetch(ip + "bio/",
+    fetch(ip + "bio/" + getQueryVariable("username"),
 		{
 		    headers: {
 		      'Accept': 'application/json',
@@ -452,29 +433,94 @@ window.onclick = function(event) {
 	});
 });
 </script>
-<br><br>
+</head>
 
-Personal To-do list<br><br>
-<div id="ggwp"></div>
-<br><br>
-Add a new task <input type="text" id="t1">
-<button id="b1">Add</button><br><br><br>
-<br><br><br>
+<body>  
 
-Squad To-do list<br><br>
-<div id="ggwp1"></div>
-<br><br>
-Add a new task <input type="text" id="t2">
-<button id="b2">Add</button><br><br><br>
-<br><br><br>
 
-Bio of squad<br><br>
-<div id="glhf"></div>
-<br><br>
+<div class="container">
 
-  <label class="logoutLblPos">
-  <button align="right" id="logout">Logout</button>
-  </label>
-	</body>
-<button id="redirect">Redirect</button>
+	<div class="row">
+		<br/>
+		<br/>
+		<div class="col-sm-2 well" ">
+			<img src="img.jpeg" alt="Xmen" height="150" width="150">
+			<h3><b>XMEN</b></h3><br><br>
+			<div id="glhf"></div>
+			<br><br>
+
+			  <label class="logoutLblPos">
+			  
+			  </label>
+				
+			
+		</div>	
+		<div class="col-sm-10">
+			<!-- Trigger/Open The Modal -->
+			<button id="myBtn" class="btn btn-default">Click here for your bio</button>
+			<button id="redirect" class="btn btn-default">Redirect</button>
+			<button  id="logout" class="btn btn-default">Logout</button>
+			<!-- The Modal -->
+			<div id="myModal" class="modal">
+
+			  <!-- Modal content -->
+			  <div class="modal-content">
+			    <span class="close">&times;</span>
+			    <div id="gg"></div>
+			  </div>
+
+			</div>
+
+
+			<br><br>
+
+	
+			<nav class="navbar navbar-inverse">
+			  <div class="container-fluid">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" href="#">Personal To-do List</a>
+			    </div>
+			  </div>
+			</nav>
+
+	
+			<div id="ggwp"></div>
+			<br><br>
+			<nav class="navbar navbar-inverse">
+			  <div class="container-fluid">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" href="#">Add a new Personal task </a>
+			    </div>
+			  </div>
+			</nav>
+			<input type="text" id="t1">
+			<button id="b1">Add</button><br><br><br>
+			<br><br>
+
+
+			<nav class="navbar navbar-inverse">
+			  <div class="container-fluid">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" href="#">Squad To-do list</a>
+			    </div>
+			  </div>
+			</nav>
+			<div id="ggwp1"></div>
+			<br><br>
+
+			<nav class="navbar navbar-inverse">
+			  <div class="container-fluid">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" href="#">Add a new Squad task </a>
+			    </div>
+			  </div>
+			</nav>
+			<input type="text" id="t2">
+			<button id="b2">Add</button><br><br><br>
+			<br><br><br>
+		</div>
+		
+	</div>
+</div>
+</body>
 </html>
